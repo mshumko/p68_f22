@@ -31,7 +31,7 @@ def dqdt(X, t, q, m, B):
         The magnetic field vector.
 
     """
-    qm = np.abs(q/m)
+    qm = q/m
     ode_matrix = qm*np.array([
             [0, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1, 0],
@@ -48,10 +48,10 @@ L = 5
 B = [0, 0, 3.12E-5*(1/L)**3]  # T
 
 args = (q_e, m_e, B)  # q, m , B
-w_c = q_e*np.linalg.norm(B)/m_e
+w_c = np.abs(q_e*np.linalg.norm(B)/m_e)
 f_c = 2*np.pi/w_c
 print(w_c)
-n_gyrations = 1000
+n_gyrations = 10
 t = np.linspace(0, n_gyrations*f_c, num=5000)
 solution = odeint(dqdt, q0, t, args=args)
 
