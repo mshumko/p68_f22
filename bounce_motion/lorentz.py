@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 m_e = 9.11E-31 # kg
 q_e = -1.6E-19 # C
-R_e = 6371E3 # m
+R = 6.371E6 # m
 
 def dqdt(X, t, q, m, B):
     """
@@ -31,14 +31,14 @@ def dqdt(X, t, q, m, B):
         The magnetic field vector.
 
     """
-    qm = np.sqrt(np.abs(q/m))
-    ode_matrix = qm*np.array([
+    w_c = np.sqrt(np.abs(q*np.linalg.norm(B)/m))
+    ode_matrix = np.array([
             [0, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1, 0],
             [0, 0, 0, 0, 0, 1],
-            [0, 0, 0, 0, B[2], -B[1]],
-            [0, 0, 0, -B[2], 0, B[0]],
-            [0, 0, 0, B[1], -B[0], 0]
+            [0, 0, 0, 0, w_c, 0],
+            [0, 0, 0, -w_c, 0, 0],
+            [0, 0, 0, 0, 0, 0]
         ])
     return np.matmul(ode_matrix, X)
 
@@ -50,7 +50,7 @@ B = [0, 0, 3.12E-5*(1/L)**3]  # T
 args = (q_e, m_e, B)  # q, m , B
 w_c = np.sqrt(np.abs(q_e*np.linalg.norm(B)/m_e))
 print(w_c)
-n_gyrations = 10
+n_gyrations = 2
 t = np.linspace(0, n_gyrations*2*np.pi/w_c, num=5000)
 solution = odeint(dqdt, q0, t, args=args)
 
