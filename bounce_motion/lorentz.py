@@ -31,14 +31,14 @@ def dqdt(X, t, q, m, B):
         The magnetic field vector.
 
     """
-    w_c = np.sqrt(np.abs(q*np.linalg.norm(B)/m))
-    ode_matrix = np.array([
+    qm = np.abs(q/m)
+    ode_matrix = qm*np.array([
             [0, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1, 0],
             [0, 0, 0, 0, 0, 1],
-            [0, 0, 0, 0, w_c, 0],
-            [0, 0, 0, -w_c, 0, 0],
-            [0, 0, 0, 0, 0, 0]
+            [0, 0, 0, 0, B[2], -B[1]],
+            [0, 0, 0, -B[2], 0, B[0]],
+            [0, 0, 0, B[1], -B[0], 0]
         ])
     return np.matmul(ode_matrix, X)
 
@@ -48,13 +48,15 @@ L = 5
 B = [0, 0, 3.12E-5*(1/L)**3]  # T
 
 args = (q_e, m_e, B)  # q, m , B
-w_c = np.sqrt(np.abs(q_e*np.linalg.norm(B)/m_e))
+w_c = q_e*np.linalg.norm(B)/m_e
+f_c = 2*np.pi/w_c
 print(w_c)
-n_gyrations = 2
-t = np.linspace(0, n_gyrations*2*np.pi/w_c, num=5000)
+n_gyrations = 1000
+t = np.linspace(0, n_gyrations*f_c, num=5000)
 solution = odeint(dqdt, q0, t, args=args)
 
-ax = plt.subplot(111, projection='3d')
-ax.plot3D(solution[:, 0], solution[:, 1], solution[:, 2])
-# plt.plot(solution[:, 0], solution[:, 1])
+# ax = plt.subplot(111, projection='3d')
+# ax.plot3D(solution[:, 0], solution[:, 1], solution[:, 2])
+plt.plot(solution[:, 0], solution[:, 2])
+
 plt.show()
