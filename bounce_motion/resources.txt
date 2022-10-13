@@ -1,0 +1,3 @@
+https://www.compadre.org/picup/exercises/Exercise.cfm?A=ParticleInMagField&S=3
+https://uio-ccse.github.io/computational-essay-showroom/essays/exercises/essayseeds/MagneticBottle_Numpy.html
+https://flothesof.github.io/charged-particle-trajectories-E-and-B-fields.html
